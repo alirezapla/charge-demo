@@ -1,8 +1,7 @@
-from email import message
 from fastapi import FastAPI, Depends
 from fastapi.responses import JSONResponse
 from schema import ChargeCodeRequest
-from common import publish, create_connection, publish_with_connection
+from common import create_connection, publish_with_connection
 from datetime import datetime
 import uuid
 import uvicorn
@@ -15,17 +14,19 @@ from starlette.status import HTTP_429_TOO_MANY_REQUESTS
 from typing import Callable, Awaitable, Any
 from limiter import hit
 
+from decouple import config
+
 api = FastAPI(title="Distpacher", version="0.0.1")
 
-rabbit_user = config("rabbitmq_username", "guest")
-rabbit_pass = config("rabbitmq_password", "guest")
-rabbit_host = config("rabbitmq_addresses", "localhost:5672")
-rabbit_vhost = config("rabbitmq_virtual_host", "pla")
+rabbit_user = config("RABBIT_USERNAME", "guest")
+rabbit_pass = config("RABBIT_PASS", "guest")
+rabbit_host = config("RABBIT_URL", "localhost:5672")
+rabbit_vhost = config("RABBIT_V_HOST", "pla")
 BROKER = f"amqp://{rabbit_user}:{rabbit_pass}@{rabbit_host}/{rabbit_vhost}"
 
 
 async def rate_provider(request: Request) -> str:
-    return 3
+    return config("RATE_LIMIT")
 
 
 async def identifier(request: Request) -> str:
@@ -95,8 +96,6 @@ async def submit_code(
         "transaction_id": str(uuid.uuid4()),
         "timestamp": datetime.now().timestamp(),
     }
-    print(connection)
-    # await publish("dispatcher", BROKER, json.dumps(message))
     await publish_with_connection(connection, "dispatcher", json.dumps(message))
     return JSONResponse({"response": message["transaction_id"]})
 
