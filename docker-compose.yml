@@ -1,0 +1,167 @@
+version: '3'
+services:
+  predis:
+    hostname: predis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+  rabbitmq:
+    image: rabbitmq:3.10-management
+    command: "rabbitmq-server"
+    environment:
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_VHOST=pla
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    # charge service
+  charge:
+    build:
+      context: .
+      dockerfile: charge_service/Dockerfile
+    container_name: charge
+    restart: always
+    # tty: true
+    # stdin_open: true
+    # command: cat
+    command: python main.py
+    ports:
+      - 5761:5002
+    env_file:
+      - charge_service/.env
+    volumes:
+      - ./charge_service:/app
+      - ./common:/app/common
+
+  charge-db:
+    container_name: charge-db
+    image: mongo
+    ports:
+      - "27017"
+    volumes:
+      - data:/bitnami/mongodb
+volumes:
+  data:
+    #   config1:
+    #     image: mongo
+    #     command: mongod --port 27017 --configsvr --replSet configserver
+    #     ports:
+    #       - 27001:27017
+    #     volumes:
+    #       - ./mongo_utils/scripts:/scripts
+    #       - config1-volume:/data/db
+    #     links:
+    #       - shard1a
+    #       - shard2a
+
+    #   config2:
+    #     image: mongo
+    #     command: mongod --port 27017 --configsvr --replSet configserver
+    #     ports:
+    #       - 27002:27017
+    #     volumes:
+    #       - ./mongo_utils/scripts:/scripts
+    #       - config2-volume:/data/db
+    #     links:
+    #       - config1
+
+    #   # config3:
+    #   #   image: mongo
+    #   #   command: mongod --port 27017 --configsvr --replSet configserver
+    #   #   ports:
+    #   #     - 27003:27017
+    #   #   volumes:
+    #   #     - ./mongo_utils/scripts:/scripts
+    #   #     - config3-volume:/data/db
+    #   #   links:
+    #   #     - config2
+
+    #   # Shards
+    #   shard1a:
+    #     image: mongo
+    #     container_name: shard1a
+    #     command: mongod --port 27017 --shardsvr --replSet shard1
+    #     ports:
+    #       - 27111:27017
+    #     links:
+    #       - shard1b
+    #     volumes:
+    #       - ./mongo_utils/scripts:/scripts
+    #       - /var/run/docker.sock:/var/run/docker.sock
+    #       - shard1a-volume:/data/db
+    #   #    cpus: 0.2
+    #   #    mem_limit: 200000000
+
+    #   shard1b:
+    #     image: mongo
+    #     container_name: shard1b
+    #     command: mongod --port 27017 --shardsvr --replSet shard1
+    #     ports:
+    #       - 27112:27017
+    #     volumes:
+    #       - ./mongo_utils/scripts:/scripts
+    #       - shard1b-volume:/data/db
+    #   #    cpus: 0.2
+    #   #    mem_limit: 200000000
+
+    #   shard2a:
+    #     image: mongo
+    #     container_name: shard2a
+    #     command: mongod --port 27017 --shardsvr --replSet shard2
+    #     links:
+    #       - shard2b
+    #     ports:
+    #       - 27221:27017
+    #     volumes:
+    #       - ./mongo_utils/scripts:/scripts
+    #       #      - /var/run/docker.sock:/var/run/docker.sock
+    #       - shard2a-volume:/data/db
+    #   #    cpus: 0.2
+    #   #    mem_limit: 200000000
+
+    #   shard2b:
+    #     image: mongo
+    #     container_name: shard2b
+    #     command: mongod --port 27017 --shardsvr --replSet shard2
+    #     ports:
+    #       - 27222:27017
+    #     volumes:
+    #       - ./mongo_utils/scripts:/scripts
+    #       - shard2b-volume:/data/db
+    #   #    cpus: 0.2
+    #   #    mem_limit: 200000000
+
+
+
+    #   # Router
+    #   router:
+    #     image: mongo
+    #     container_name: router
+    #     command: mongos --port 27017 --configdb configserver/config1:27017,config2:27017 --bind_ip_all
+    #     ports:
+    #       - 27017:27017
+    #     restart: always
+
+    #     volumes:
+    #       - ./mongo_utils/scripts:/scripts
+    #       - router-volume:/data/db
+    #     environment:
+    #       - MONGO_INITDB_ROOT_USERNAME=root
+    #       - MONGO_INITDB_ROOT_PASSWORD=pass
+    #     depends_on:
+    #       - config1
+    #       - config2
+    #       - shard1a
+    #       - shard1b
+    #       - shard2a
+    #       - shard2b
+
+    # volumes:
+    #   config1-volume:
+    #   config2-volume:
+    #   shard1a-volume:
+    #   shard1b-volume:
+    #   shard2a-volume:
+    #   shard2b-volume:
+    #   router-volume:
