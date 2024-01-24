@@ -7,7 +7,7 @@ first run services by
 ```python
 docker-compose up -d
 ```
-then run `mongo_init.sh`
+then run `setup.sh`
 
 ```bash
 sh mongo_utils/setup.sh
