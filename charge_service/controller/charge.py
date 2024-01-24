@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Body
-from services.charge import retrive_record, update_records_checked_flag
+from services.charge import retrive_record, update_records_checked_flag, retrive_activated_records
 from schema import Response, CodeActivationResult
 from exceptions.http_exceptions import BadRequest
 
@@ -8,8 +8,14 @@ router = APIRouter()
 
 @router.get("/newst", response_description="records retrieved", response_model=Response)
 async def get_newst_records(limit_number: int):
-    customers = await retrive_record(limit_number)
-    return response_handler(customers)
+    records = await retrive_record(limit_number)
+    return response_handler(records)
+
+
+@router.get("/activated", response_description="records retrieved", response_model=Response)
+async def get_activated_records(limit_number: int):
+    records = await retrive_activated_records(limit_number)
+    return response_handler(records)
 
 
 @router.put("/checked", response_description="records checked", response_model=Response)

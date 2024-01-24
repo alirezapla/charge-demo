@@ -12,13 +12,14 @@ from decouple import config
 logger = MyLogger()
 CODE = config("CHARGE_CODE")
 LIMIT = int(config("CHARGE_CODE_LIMIT"))
+BATCH_SIZE = int(config("BATCH_SIZE"))
 CUSTOMER_SERVICE = config("CUSTOMER_SERVICE")
 HEADERS = {"accept": "application/json", "Content-Type": "application/json"}
 
 
 async def check_newst_records_scheduler():
     logger.info("", "CHECK_RECORDS_SCHEDULER_STARTED", "check_newst_records")
-    phones = await retrive_records_phone(100)
+    phones = await retrive_records_phone(BATCH_SIZE)
     if len(phones) > 0:
         async with httpx.AsyncClient() as client:
             customers_info = await _retrive_phones_api_call(client, phones)
@@ -32,7 +33,7 @@ async def check_newst_records_scheduler():
 
 async def update_customer_service_scheduler():
     logger.info("", "UPDATE_CUSTOMER_SCHEDULER_STARTED", "update_customer_service")
-    active_records_phones = await retrive_activated_records(100)
+    active_records_phones = await retrive_activated_records(BATCH_SIZE)
     if len(active_records_phones) > 0:
         async with httpx.AsyncClient() as client:
             activated_count = await _retrive_active_codes_count_api_call(client)

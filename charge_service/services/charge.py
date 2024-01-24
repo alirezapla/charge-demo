@@ -11,11 +11,15 @@ charge_collection: Document = Charge
 
 
 async def add_record(new_charge_record) -> Charge:
-    _chargge = Charge(
-        **new_charge_record, checked_label=False, working_label=False, activated_label=False
-    )
-    customer = await _chargge.create()
-    return customer
+    try:
+        _chargge = Charge(
+            **new_charge_record, checked_label=False, working_label=False, activated_label=False
+        )
+        customer = await _chargge.create()
+
+        return customer
+    except Exception as e:
+        logger.info(e, "EXCEPTION_IN_CREATE", "add_record")
 
 
 async def retrive_record(limit: int) -> Charge:
@@ -46,13 +50,16 @@ async def retrive_records_phone(limit: int) -> list:
 async def retrive_activated_records(limit: int) -> list:
     logger.info("", "RETRIVED_ACTIVE_RECORDS_STARTED", "retrive_activated_records")
     _records = []
+    records = (
+        await charge_collection.find(Charge.activated_label == True)
+        .sort(Charge.timestamp)
+        .limit(limit)
+        .to_list()
+    )
 
-    async for record in charge_collection.find(Charge.activated_label == True).sort(
-        Charge.timestamp
-    ).limit(limit):
-        record.working_label = True
+    for record in records:
         _records.append(record.phone_number_code.split("__")[0])
-        await record.save()
+        # await record.save()
     logger.info(_records, "RETRIVED_ACTIVE_RECORDS_FINISHED", "retrive_activated_records")
     return _records
 
