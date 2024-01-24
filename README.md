@@ -7,10 +7,11 @@
 
 ![alt text](https://github.com/minhhungit/mongodb-cluster-docker-compose/blob/master/images/sharding-and-replica-sets.png)
 
-first run services by
+first, run services by
 
 ```python
 docker-compose up -d
+docker-compose -f docker-compose-db.yml up -d
 ```
 then run `setup.sh`
 
