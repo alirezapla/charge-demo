@@ -28,6 +28,7 @@ async def retrieve_customer(id: PydanticObjectId) -> Customer:
     customer = await customer_collection.get(id)
     if customer:
         return object_mapper(customer)
+    return None
 
 
 async def retrieve_customer_by_phone(phone_number: str) -> Customer:
@@ -35,6 +36,7 @@ async def retrieve_customer_by_phone(phone_number: str) -> Customer:
     print(customer)
     if customer:
         return object_mapper(customer)
+    return None
 
 
 async def retrieve_group_customers(phone_numbers: list[str]) -> dict:
