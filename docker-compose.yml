@@ -41,8 +41,38 @@ services:
       - "27017"
     volumes:
       - data:/bitnami/mongodb
+
+  dispatcher:
+    build:
+      context: .
+      dockerfile: dispatcher/Dockerfile
+    container_name: dispatcher
+    restart: always
+    command: python app.py
+    ports:
+      - 6163:5001
+    env_file:
+      - dispatcher/.env
+    volumes:
+      - ./dispatcher:/app
+      - ./common:/app/common
+  customer:
+    build:
+      context: .
+      dockerfile: customer_service/Dockerfile
+    container_name: customer
+    restart: always
+    command: python main.py
+    ports:
+      - 8080:8080
+    env_file:
+      - customer_service/.env
+    volumes:
+      - ./customer_service:/app
+      - ./common:/app/common
 volumes:
   data:
+    #   # config
     #   config1:
     #     image: mongo
     #     command: mongod --port 27017 --configsvr --replSet configserver
@@ -65,17 +95,6 @@ volumes:
     #       - config2-volume:/data/db
     #     links:
     #       - config1
-
-    #   # config3:
-    #   #   image: mongo
-    #   #   command: mongod --port 27017 --configsvr --replSet configserver
-    #   #   ports:
-    #   #     - 27003:27017
-    #   #   volumes:
-    #   #     - ./mongo_utils/scripts:/scripts
-    #   #     - config3-volume:/data/db
-    #   #   links:
-    #   #     - config2
 
     #   # Shards
     #   shard1a:
@@ -137,18 +156,18 @@ volumes:
     #   # Router
     #   router:
     #     image: mongo
-    #     container_name: router
+    #     container_name: mongo-router
     #     command: mongos --port 27017 --configdb configserver/config1:27017,config2:27017 --bind_ip_all
     #     ports:
-    #       - 27017:27017
+    #       - "27017"
     #     restart: always
 
     #     volumes:
     #       - ./mongo_utils/scripts:/scripts
     #       - router-volume:/data/db
-    #     environment:
-    #       - MONGO_INITDB_ROOT_USERNAME=root
-    #       - MONGO_INITDB_ROOT_PASSWORD=pass
+    #     # environment:
+    #     #   - MONGO_INITDB_ROOT_USERNAME=root
+    #     #   - MONGO_INITDB_ROOT_PASSWORD=pass
     #     depends_on:
     #       - config1
     #       - config2
@@ -165,3 +184,4 @@ volumes:
     #   shard2a-volume:
     #   shard2b-volume:
     #   router-volume:
+    # data:
