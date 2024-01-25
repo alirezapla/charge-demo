@@ -1,2 +1,2 @@
 #!/bin/bash
-docker-compose exec router sh -c "mongosh  < /scripts/enAuth.js"
+docker-compose -f docker-compose-db.yml exec router sh -c "mongosh  < /scripts/enAuth.js"

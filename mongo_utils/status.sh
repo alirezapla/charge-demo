@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker-compose exec router sh -c "mongosh < scripts/status.js"
+docker-compose -f docker-compose-db.yml exec router sh -c "mongosh < scripts/status.js"
