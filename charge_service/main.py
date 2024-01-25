@@ -1,12 +1,13 @@
-import uvicorn
-from fastapi import FastAPI
 import services.consumer as consumer
-from core.config import initiate_database
+import uvicorn
 from controller.charge import router
+from core.config import initiate_database
+from fastapi import FastAPI
 from fastapi_amis_admin.admin.settings import Settings
 from fastapi_amis_admin.admin.site import AdminSite
 from fastapi_scheduler import SchedulerAdmin
-from services.scheduler import check_newst_records_scheduler, update_customer_service_scheduler
+from services.scheduler import (check_newst_records_scheduler,
+                                update_customer_service_scheduler)
 
 VERSION = "0.0.1"
 TITLE = "charge"

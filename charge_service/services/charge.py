@@ -1,9 +1,8 @@
 from beanie import Document
-from models import Charge, object_mapper
 from beanie.operators import In
-from schema import CodeActivationResult
-from common import MyLogger
+from models import Charge, object_mapper
 
+from common import MyLogger
 
 logger = MyLogger()
 
@@ -59,7 +58,6 @@ async def retrive_activated_records(limit: int) -> list:
 
     for record in records:
         _records.append(record.phone_number_code.split("__")[0])
-        # await record.save()
     logger.info(_records, "RETRIVED_ACTIVE_RECORDS_FINISHED", "retrive_activated_records")
     return _records
 

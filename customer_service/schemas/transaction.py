@@ -1,8 +1,9 @@
-from typing import Optional, Any
 from datetime import datetime
+from typing import Any, Optional
+
 from beanie import Document
-from pydantic import BaseModel, Field
 from bson import ObjectId
+from pydantic import BaseModel, Field
 
 
 class Transaction(BaseModel):

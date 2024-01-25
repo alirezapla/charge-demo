@@ -1,5 +1,5 @@
-from limits import RateLimitItem, RateLimitItemPerMinute, storage, strategies
 from decouple import config
+from limits import RateLimitItem, RateLimitItemPerMinute, storage, strategies
 
 storage = storage.RedisStorage(config("REDIS_URL"))
 throttler = strategies.MovingWindowRateLimiter(storage)

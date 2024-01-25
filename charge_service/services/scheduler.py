@@ -1,13 +1,9 @@
-from services.charge import (
-    retrive_activated_records,
-    retrive_records_phone,
-    update_records_checked_flag,
-    soft_delete_records,
-)
 import httpx
-from common import MyLogger
 from decouple import config
+from services.charge import (retrive_activated_records, retrive_records_phone,
+                             soft_delete_records, update_records_checked_flag)
 
+from common import MyLogger
 
 logger = MyLogger()
 CODE = config("CHARGE_CODE")

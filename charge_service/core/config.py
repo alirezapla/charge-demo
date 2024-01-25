@@ -1,11 +1,12 @@
 import os
-from functools import lru_cache
-from pydantic_settings import BaseSettings
 from enum import Enum
-from decouple import config
-from beanie import init_beanie
-from motor.motor_asyncio import AsyncIOMotorClient
+from functools import lru_cache
+
 import models as models
+from beanie import init_beanie
+from decouple import config
+from motor.motor_asyncio import AsyncIOMotorClient
+from pydantic_settings import BaseSettings
 
 
 class Environment(Enum):

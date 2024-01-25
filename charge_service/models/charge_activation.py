@@ -1,8 +1,9 @@
 from datetime import datetime
 from typing import List
+
 from beanie import Document, Indexed
-from pydantic import BaseModel, EmailStr, Field
 from bson import ObjectId
+from pydantic import BaseModel, EmailStr, Field
 
 
 class Charge(Document):
@@ -31,15 +32,3 @@ def object_mapper(object: Charge):
         "working_label": object.working_label,
         "activated_label": object.activated_label,
     }
-
-
-# def object_mapper(object: Charge):
-#     return {
-#         "id": str(object.id),
-#         "phone_number_code": object.phone_number_code,
-#         "timestamp": object.timestamp,
-#         "transaction_id": object.transaction_id,
-#         "checked_label": object.checked_label,
-#         "working_label": object.working_label,
-#         "activated_label": object.activated_label,
-#     }

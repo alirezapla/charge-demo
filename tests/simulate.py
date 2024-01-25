@@ -234,16 +234,16 @@ valid_phones = [
 ]
 
 
-for i in range(100):
+for i in range(1):
     wait = random.uniform(0.3, 0.6)
     time.sleep(wait)
 
-    print("send", wait)
     prob = random.randint(1, 3)
     # if prob == 1:
     #     phone_number = f"0912{random.randint(1000000,9999999)}"
     # else:
     phone_number = random.choice(valid_phones)
+    print(phone_number, "send", wait)
     json_data = {
         "phone_number": phone_number,
         "charge_code": "a",

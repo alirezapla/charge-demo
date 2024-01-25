@@ -1,9 +1,10 @@
 from typing import List
+
 from beanie import Document, Indexed
-from pydantic import BaseModel, EmailStr, Field
-from models.transactions import object_mapper as transaction_mapper
-from schemas.transaction import ReadTransaction
 from bson import ObjectId
+from models.transactions import object_mapper as transaction_mapper
+from pydantic import BaseModel, EmailStr, Field
+from schemas.transaction import ReadTransaction
 
 
 class Customer(Document):

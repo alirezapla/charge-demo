@@ -1,6 +1,7 @@
-from typing import Optional, Any, List
-from pydantic import BaseModel, EmailStr, Field
+from typing import Any, List, Optional
+
 from bson import ObjectId
+from pydantic import BaseModel, EmailStr, Field
 
 
 class Transaction(BaseModel):

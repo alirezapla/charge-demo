@@ -1,7 +1,7 @@
 import uvicorn
-from fastapi import FastAPI
 from config.config import initiate_database
 from controller.customer import router as CustomerRouter
+from fastapi import FastAPI
 
 app = FastAPI()
 

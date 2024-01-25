@@ -1,14 +1,9 @@
-from fastapi import APIRouter, Body
-
-from services.repository import *
-from models.customer import *
-from schemas.customer import (
-    CreateCustomerModel,
-    UpdateCustomerModel,
-    Response,
-    AddTransactionCustomerModel,
-)
 from exceptions.customer_exceptions import BadRequest
+from fastapi import APIRouter, Body
+from models.customer import *
+from schemas.customer import (AddTransactionCustomerModel, CreateCustomerModel,
+                              Response, UpdateCustomerModel)
+from services.repository import *
 
 router = APIRouter()
 

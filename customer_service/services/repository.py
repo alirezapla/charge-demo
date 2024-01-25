@@ -1,13 +1,16 @@
 from typing import List, Union
-from beanie import PydanticObjectId, Document
+
+from beanie import Document, PydanticObjectId
+from beanie.operators import In
+from exceptions.customer_exceptions import BadRequest
 from models.customer import Customer, object_mapper
 from models.transactions import Transaction
-from schemas.customer import CreateCustomerModel, AddTransactionCustomerModel
+from schemas.customer import AddTransactionCustomerModel, CreateCustomerModel
 from schemas.transaction import CreateTransaction
-from exceptions.customer_exceptions import BadRequest
-from beanie.operators import In
 
 customer_collection: Document = Customer
+ONE_MILLION = 1_000_000
+WIN_DESC = "winning charge"
 
 
 async def retrieve_customers(limit_number: int) -> List[Customer]:
@@ -20,8 +23,11 @@ async def retrieve_customers(limit_number: int) -> List[Customer]:
 
 async def add_customer(new_customer: CreateCustomerModel) -> Customer:
     _customer = Customer(**new_customer.dict(), transactions=[])
-    customer = await _customer.create()
-    return customer
+    try:
+        customer = await _customer.create()
+        return customer
+    except Exception as e:
+        return BadRequest("Already exist")
 
 
 async def retrieve_customer(id: PydanticObjectId) -> Customer:
@@ -49,8 +55,10 @@ async def retrieve_group_customers(phone_numbers: list[str]) -> dict:
 
 async def update_group_customers(phone_numbers: list[str], code) -> dict:
     _updated_count = 0
+    customer: Customer
     async for customer in customer_collection.find(In(Customer.phone_number, phone_numbers)):
         customer.charge_code = code
+        customer.transactions.append(await add_transaction(ONE_MILLION, WIN_DESC))
         await customer.save()
         _updated_count += 1
     return {"updated": _updated_count}
@@ -60,6 +68,7 @@ async def retrieve_customer_balance(id: PydanticObjectId) -> Customer:
     customer: Customer = await customer_collection.get(id)
     if customer:
         return {"balance": await get_balance(customer)}
+    return None
 
 
 async def retrieve_activated_code_count(code: str) -> Customer:
@@ -101,6 +110,11 @@ async def add_transaction_to_customer_transactions(
 async def create_transacion(new_transaction: CreateTransaction):
     _transaction = Transaction(**new_transaction.dict())
     transaction = await _transaction.create()
+    return transaction
+
+
+async def add_transaction(amount: str, description: str):
+    transaction = await Transaction(amount=amount, description=description).create()
     return transaction
 
 

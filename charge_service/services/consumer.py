@@ -1,11 +1,14 @@
+import asyncio
+import json
+
+import orjson
 from aio_pika import connect_robust
 from aio_pika.abc import AbstractIncomingMessage, AbstractRobustConnection
-import asyncio
-import orjson
-import json
 from decouple import config
-from common import MyLogger, publish
 from schema import DispatcherMessage
+
+from common import MyLogger, publish
+
 from .charge import add_record
 
 logger = MyLogger()
@@ -37,11 +40,7 @@ async def con() -> None:
 async def broker_ready_up(conn: AbstractRobustConnection, listen_queue: str):
     channel = await conn.channel()
     await channel.set_qos(prefetch_count=1)
-    # direct_logs_exchange = await channel.declare_exchange(
-    #     "test", ExchangeType.DIRECT
-    # )
     queue = await channel.declare_queue(listen_queue, passive=True, durable=True)
-    # await queue.bind(direct_logs_exchange,routing_key="test")
     return queue
 
 
