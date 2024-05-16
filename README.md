@@ -1,7 +1,21 @@
 # Charge and Customer Services demo
 
 ### Overview
+World Cup Discount Code Distribution System
+Overview
 
+This project is designed to distribute discount codes during the halftime of the World Cup finals. The goal is to distribute a set of discount codes with a total value of around 1 million units. The system is built to handle high traffic loads, ensuring that all users can receive their discount codes efficiently and reliably.
+Features
+
+    High Availability: Designed to withstand high traffic loads and ensure continuous availability.
+    Scalability: Can scale horizontally to manage increasing user demands.
+    Efficiency: Ensures quick and efficient distribution of discount codes.
+    Security: Prevents abuse and ensures that each user can only claim one discount code.
+
+Components
+
+    Backend: The core logic for handling discount code requests and distributing them efficiently.
+    Database: Stores information about the discount codes and tracks which codes have been claimed.
 ## services
 
 #### Architecture
