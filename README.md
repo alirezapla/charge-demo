@@ -24,7 +24,6 @@ Components
 
 #### Technology Stack
 
-Technology Stack
 
     Backend: ‍Python, FastAPI
     Message Queue: RabbitMQ
