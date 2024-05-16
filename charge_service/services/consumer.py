@@ -32,8 +32,6 @@ async def con() -> None:
                         async with message.process():
                             await message_handler(message, "next")
         except ConnectionError as e:
-            print(e)
-            print("waiting for connection")
             await asyncio.sleep(5)
 
 
@@ -55,14 +53,12 @@ def _fetch_message(message: AbstractIncomingMessage) -> DispatcherMessage:
     return _msg
 
 
-def _result_message(message: DispatcherMessage):
-    res = {
+def _result_message(message: DispatcherMessage) -> dict:
+    return json.dumps({
         "transaction_id": message.transaction_id,
         "phone_number_code": message.phone_number_code,
         "timestamp": message.timestamp,
-    }
-    json_res = json.dumps(res)
-    return json_res
+    })
 
 
 async def _error_exception(transaction_id: str, message: str = "", module: str = None):
