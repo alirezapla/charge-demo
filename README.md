@@ -25,7 +25,7 @@ Components
 #### Technology Stack
 
 
-    Backend: ‍Python, FastAPI
+    Backend: ‍Python, FastAPI, aio-pika
     Message Queue: RabbitMQ
     Cache and Locking: Redis
     Database: MongoDB
