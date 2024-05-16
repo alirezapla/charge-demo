@@ -24,7 +24,13 @@ Components
 
 #### Technology Stack
 
-`python` ,`fastapi`, `rabbitmq`, `redis`, `mongodb`
+Technology Stack
+
+    Backend: ‍Python, FastAPI
+    Message Queue: RabbitMQ
+    Cache and Locking: Redis
+    Database: MongoDB
+    Containerization: Docker
 
 Configuration
 
